@@ -18,3 +18,4 @@ fpart = str [pos+2:]  #Es dos porque hay un espacio
 print (fpart)
 value = float (fpart)
 
+text = "X-DSPAM-Confidence:    0.8475"
