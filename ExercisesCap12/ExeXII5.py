@@ -1,19 +1,16 @@
 import socket
 
-my_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-my_sock.connect(('data.pr4e.org', 80))
-cmd = 'GET http://data.pr4e.org/romeo.txt HTTP/1.0\n\n'.encode()
-my_sock.send(cmd)
+mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+mysock.connect(('data.pr4e.org', 80))
+cmd = 'GET http://data.pr4e.org/romeo.txt HTTP/1.0\r\n\r\n'.encode()
+mysock.send(cmd)
 
-data = my_sock.recv(512)
-message = data.decode()
-header_end_pos = message.find('\r\n\r\n') + 4   # Finds the end of header
-                                            # Adds four to exclude:'\r\n\r\n'
-print(message[header_end_pos:])
-while True:                                 # Header in the first data only
-    data = my_sock.recv(512)
-    if not data:
+response = ''
+while True:
+    data = mysock.recv(512)
+    if len(data) < 1:
         break
-    print(data.decode())
-my_sock.close()
+    response = response + data.decode()
+print(response.split('\r\n\r\n')[1]) #si coloco 0 me aparece el encabezado, si coloco 1 me parece el cuerpo del texto, si coloco 2 list index out of range.
 
+mysock.close()
